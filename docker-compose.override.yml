@@ -1,0 +1,29 @@
+version: "2"
+
+networks:
+  back-tier:
+    driver: bridge
+
+services:
+  backend-api:
+    ports:
+    - 44444:80
+    environment:
+      DB_USER: "postgres"
+      DB_PASSWORD: "postgres"
+      DB_DATABASE: "test"
+      DB_HOST: "database"
+    links:
+      - database
+
+  database:
+    extends:
+      file: abstract-cluster.yml
+      service: base_postgres
+    image: postgres
+    environment:
+      POSTGRES_DB: "test"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - 5432:5432

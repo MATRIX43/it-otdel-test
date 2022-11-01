@@ -1,0 +1,29 @@
+version: "2"
+
+networks:
+  back-tier:
+    driver: bridge
+
+services:
+  backend-api:
+    extends:
+      service: base_api
+      file: abstract-cluster.yml
+    environment:
+      DB_USER: <CHANGE_ME_IN_OVERRIDE>
+      DB_PASSWORD: <CHANGE_ME_IN_OVERRIDE>
+      DB_DATABASE: <CHANGE_ME_IN_OVERRIDE>
+      DB_HOST: <CHANGE_ME_IN_OVERRIDE>
+    build: ../it-otdel-test-backend/app
+    links:
+      - database
+
+  database:
+    extends:
+      file: abstract-cluster.yml
+      service: base_postgres
+    image: postgres
+    environment:
+      POSTGRES_DB: <CHANGE_ME>
+      POSTGRES_USER: <CHANGE_ME>
+      POSTGRES_PASSWORD: <CHANGE_ME>
